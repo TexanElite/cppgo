@@ -10,7 +10,6 @@
 #include "piece.hpp"
 
 namespace cppgo::core {
-
 struct GameState {
     Color turn;
     GameState() : turn{Color::BLACK} {};
@@ -20,7 +19,8 @@ struct GameState {
 class Game {
    public:
     Game() = default;
-    Game(const BoardSize board_size) : _board_queue({Board(board_size)}), _game_state_queue{GameState()} {}
+    Game(const BoardSize board_size)
+        : _board_queue({Board(board_size)}), _game_state_queue{GameState()} {}
     void makeMove(const Position &position) {
         Board &cur_board = _board_queue.front();
         GameState &curGameState = _game_state_queue.front();
@@ -44,9 +44,7 @@ class Game {
         _game_state_queue.emplace_back(new_game_state);
     }
 
-    void unmakeMove() {
-        
-    }
+    void unmakeMove() {}
 
     std::string print_to_string() {
         Board &cur_board = _board_queue.front();

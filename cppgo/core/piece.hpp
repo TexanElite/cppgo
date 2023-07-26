@@ -6,6 +6,7 @@
 namespace cppgo::core {
 struct Piece {
     Color color;
+    Position position;
 };
 }  // namespace cppgo::core
 

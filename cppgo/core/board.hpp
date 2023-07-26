@@ -46,7 +46,8 @@ struct Board {
         return group;
     }
 
-    int get_group_liberties(const Position &position) {
+    int get_group_liberties(
+        const Position &position) {  // TODO: Avoid double-counting liberties.
         int liberties = 0;
         for (Position &stone : get_group(position)) {
             for (Position &adj_position : stone.get_adj_positions()) {
@@ -56,7 +57,7 @@ struct Board {
                         Color::NONE;
             }
         }
-        return true;
+        return liberties;
     }
 
     bool is_group_surrounded(const Position &position) {

@@ -1,6 +1,8 @@
 #ifndef COLOR_HPP
 #define COLOR_HPP
 
+#include <assert.h>
+
 namespace cppgo::core {
 enum Color {
     NONE,
@@ -9,6 +11,10 @@ enum Color {
 };
 
 constexpr Color inverse_color(Color color) {
+    if (color == NONE) {
+        throw IllegalColorException();
+    }
+
     return Color(WHITE - color + BLACK);
 }
 }
