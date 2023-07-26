@@ -10,26 +10,29 @@
 #include "piece.hpp"
 
 namespace cppgo::core {
-struct GameState {
-    Color turn;
-    GameState() : turn{Color::BLACK} {};
-    GameState(Color color) : turn{color} {};
-};
+struct GameState {};
 
 class Game {
    public:
     Game() = default;
     Game(const BoardSize board_size)
-        : _board_queue({Board(board_size)}), _game_state_queue{GameState()} {}
+        : _boards({Board(board_size)}), _game_states{GameState()} {}
+
+    inline Color turn() const { return Color(2 - _game_states.size() % 2U); }
+
+    inline Board &board() { return _boards.back(); }
+
+    inline GameState &game_state() { return _game_states.back(); }
+
     void makeMove(const Position &position) {
-        Board &cur_board = _board_queue.front();
-        GameState &curGameState = _game_state_queue.front();
+        Board &cur_board = board();
+        GameState &cur_game_state = game_state();
         if (cur_board[position] != Color::NONE) {
             throw IllegalMoveException();
         }
-        Board new_board(cur_board);
-        GameState new_game_state(inverse_color(curGameState.turn));
-        new_board[position] = curGameState.turn;
+        Board new_board{cur_board};
+        GameState new_game_state{};
+        new_board[position] = turn();
         if (new_board.is_group_surrounded(position)) {
             new_board[position] = Color::NONE;
             throw IllegalMoveException();
@@ -40,14 +43,17 @@ class Game {
                 new_board.remove_group(adj_position);
             }
         }
-        _board_queue.emplace_back(new_board);
-        _game_state_queue.emplace_back(new_game_state);
+        _boards.push_back(new_board);
+        _game_states.push_back(new_game_state);
     }
 
-    void unmakeMove() {}
+    void unmakeMove() {
+        _boards.pop_back();
+        _game_states.pop_back();
+    }
 
     std::string print_to_string() {
-        Board &cur_board = _board_queue.front();
+        Board &cur_board = _boards.front();
         std::ostringstream output;
         output << "  ";
         for (unsigned int y = 0; y < cur_board.size(); y++) {
@@ -78,8 +84,8 @@ class Game {
     }
 
    private:
-    std::deque<Board> _board_queue;
-    std::deque<GameState> _game_state_queue;
+    std::deque<Board> _boards;
+    std::deque<GameState> _game_states;
 };
 }  // namespace cppgo::core
 

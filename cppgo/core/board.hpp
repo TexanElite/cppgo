@@ -48,16 +48,17 @@ struct Board {
 
     int get_group_liberties(
         const Position &position) {  // TODO: Avoid double-counting liberties.
-        int liberties = 0;
+        std::unordered_set<Position> liberties;
         for (Position &stone : get_group(position)) {
             for (Position &adj_position : stone.get_adj_positions()) {
-                liberties +=
-                    is_position_in_board(adj_position) &&
+                if (is_position_in_board(adj_position) &&
                     _piece_board[position_to_board_index(adj_position)] ==
-                        Color::NONE;
+                        Color::NONE) {
+                    liberties.insert(adj_position);
+                }
             }
         }
-        return liberties;
+        return liberties.size();
     }
 
     bool is_group_surrounded(const Position &position) {
@@ -73,6 +74,7 @@ struct Board {
    private:
     BoardSize _board_size;
     std::vector<Color> _piece_board;
+
     constexpr size_t position_to_board_index(const Position &position) const {
         return position.x + position.y * _board_size;
     }

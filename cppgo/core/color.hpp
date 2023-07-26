@@ -3,6 +3,8 @@
 
 #include <assert.h>
 
+#include "exception.hpp"
+
 namespace cppgo::core {
 enum Color {
     NONE,
@@ -11,12 +13,11 @@ enum Color {
 };
 
 constexpr Color inverse_color(Color color) {
-    if (color == NONE) {
+    if (color == Color::NONE) {
         throw IllegalColorException();
     }
-
     return Color(WHITE - color + BLACK);
 }
-}
+}  // namespace cppgo::core
 
 #endif
