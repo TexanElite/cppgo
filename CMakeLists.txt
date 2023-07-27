@@ -15,8 +15,9 @@ include(GoogleTest)
 
 enable_testing()
 add_executable(cppgo cppgo/main.cpp)
-add_executable(core_tests cppgo/core/board.test.cpp cppgo/core/game.test.cpp)
+add_executable(core_tests tests/core/board.test.cpp tests/core/game.test.cpp)
 target_include_directories(cppgo PUBLIC cppgo)
+target_include_directories(core_tests PRIVATE cppgo)
 target_link_libraries(core_tests GTest::gtest_main)
 gtest_discover_tests(core_tests)
 
