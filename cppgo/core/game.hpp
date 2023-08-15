@@ -28,20 +28,24 @@ class Game {
         Board &cur_board = board();
         GameState &cur_game_state = game_state();
         if (cur_board[position] != Color::NONE) {
-            throw IllegalMoveException();
+            throw IllegalMoveException(); // Occupied
         }
         Board new_board{cur_board};
         GameState new_game_state{};
         new_board[position] = turn();
-        if (new_board.is_group_surrounded(position)) {
-            new_board[position] = Color::NONE;
-            throw IllegalMoveException();
-        }
         for (Position &adj_position : position.get_adj_positions()) {
             if (new_board.is_position_in_board(adj_position) &&
+                new_board[adj_position] == inverse_color(turn()) &&
                 new_board.is_group_surrounded(adj_position)) {
                 new_board.remove_group(adj_position);
             }
+        }
+        if (new_board.is_group_surrounded(position)) {
+            throw IllegalMoveException(); // Suicide
+        }
+
+        if (_boards.size() >= 2 && new_board == *std::next(_boards.rbegin())) {
+            throw IllegalMoveException(); // Ko
         }
         _boards.push_back(new_board);
         _game_states.push_back(new_game_state);
@@ -53,7 +57,7 @@ class Game {
     }
 
     std::string print_to_string() {
-        Board &cur_board = _boards.front();
+        Board &cur_board = _boards.back();
         std::ostringstream output;
         output << "  ";
         for (unsigned int y = 0; y < cur_board.size(); y++) {

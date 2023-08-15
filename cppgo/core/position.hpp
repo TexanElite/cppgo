@@ -18,9 +18,9 @@ struct Position {
         return x == other.x && y == other.y;
     }
 
-    constexpr Position north() const { return Position{x, y + 1}; }
+    constexpr Position north() const { return Position{x, y - 1}; }
 
-    constexpr Position south() const { return Position{x, y - 1}; }
+    constexpr Position south() const { return Position{x, y + 1}; }
 
     constexpr Position east() const { return Position{x + 1, y}; }
 

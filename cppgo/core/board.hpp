@@ -31,6 +31,10 @@ struct Board {
         return _piece_board[position_to_board_index(position)];
     }
 
+    constexpr friend bool operator==(const Board &lhs, const Board &rhs) {
+        return lhs._board_size == rhs._board_size && lhs._piece_board == rhs._piece_board;
+    }
+
     constexpr bool is_position_in_board(const Position &position) const {
         return position.x < _board_size && position.y < _board_size;
     }
@@ -46,8 +50,7 @@ struct Board {
         return group;
     }
 
-    int get_group_liberties(
-        const Position &position) {  // TODO: Avoid double-counting liberties.
+    int get_group_liberties(const Position &position) {
         std::unordered_set<Position> liberties;
         for (Position &stone : get_group(position)) {
             for (Position &adj_position : stone.get_adj_positions()) {

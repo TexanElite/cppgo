@@ -23,6 +23,7 @@ class Engine {
                 }
             }
         }
+        return Position{-1U, -1U};
     }
 
    private:
