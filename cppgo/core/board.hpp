@@ -32,7 +32,8 @@ struct Board {
     }
 
     constexpr friend bool operator==(const Board &lhs, const Board &rhs) {
-        return lhs._board_size == rhs._board_size && lhs._piece_board == rhs._piece_board;
+        return lhs._board_size == rhs._board_size &&
+               lhs._piece_board == rhs._piece_board;
     }
 
     constexpr bool is_position_in_board(const Position &position) const {

@@ -11,10 +11,10 @@ TEST(GameTest, InitializeGame) {
 
 TEST(GameTest, MakeMove) {
     Game game(BoardSize::NINETEEN);
-    game.makeMove({1, 1});
+    game.make_move({1, 1});
     EXPECT_EQ(game.turn(), Color::WHITE);
-    EXPECT_EQ((game.board()[{1, 1}]), Color::BLACK);
-    EXPECT_THROW(game.makeMove({1, 1}), IllegalMoveException);
-    game.unmakeMove();
-    EXPECT_EQ((game.board()[{1, 1}]), Color::NONE);
+    EXPECT_EQ((game.game_state().board[{1, 1}]), Color::BLACK);
+    EXPECT_THROW(game.make_move({1, 1}), IllegalMoveException);
+    game.unmake_move();
+    EXPECT_EQ((game.game_state().board[{1, 1}]), Color::NONE);
 }
